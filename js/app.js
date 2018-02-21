@@ -8,9 +8,29 @@ var pickedColor = pickColor();
 var colorDisplay = document.getElementById("colorDisplay");
 //ambil span di nav
 var messageDisplay = document.getElementById("message");
+//ambil h1
+var h1 = document.querySelector("h1");
+//ambil button reset
+var resetButton = document.getElementById("reset");
 
-
+//mengubah colorDisplay sesuai dengan jawaban rgb
 colorDisplay.textContent = pickedColor;
+
+//mengubah semua warna jika button reset diklik
+resetButton.addEventListener("click", function(){
+	//generate warna baru
+	colors = generateRandomColors(6);
+	//mendapatkan warna pilihan sebagai jawaban
+	pickedColor = pickColor();
+	//mengubah colorDisplay sesuai dengan jawaban rgb
+	colorDisplay.textContent = pickedColor;
+	//change colors of squares
+	for(var i=0; i<squares.length; i++){
+		squares[i].style.backgroundColor = colors[i];
+	}
+	h1.style.backgroundColor = "#232323";
+})
+
 //memberi warna ke square div
 for (var i=0; i<squares.length; i++){
 	//inisialisasi warna awal ke square div
@@ -25,8 +45,10 @@ for (var i=0; i<squares.length; i++){
 		//jika salah, tampilkan pesan Try Again
 		if(clickedColor === pickedColor){
 			messageDisplay.textContent = "Correct";
+			resetButton.textContent = "Play Again?";
 			//mengubah semua warna square menjadi warna yang benar
 			changeColors(clickedColor);
+			h1.style.backgroundColor = clickedColor;
 		}
 		else{
 			//ubah warna menjadi sama dengan background, "fade out"
