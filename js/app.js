@@ -1,16 +1,9 @@
-var colors = [
-  "rgb(255, 0, 0)",
-  "rgb(255, 255, 0)",
-  "rgb(0, 255, 0)",
-  "rgb(0, 255, 255)",
-  "rgb(0, 0, 255)",
-  "rgb(255, 0, 255)"
-];
+var colors = generateRandomColors(6);
 
 //ambil element div class square
 var squares = document.querySelectorAll(".square");
-
-var pickedColor = colors[3];
+//mendapatkan warna pilihan sebagai jawaban
+var pickedColor = pickColor();
 //ambil span di h1
 var colorDisplay = document.getElementById("colorDisplay");
 //ambil span di nav
@@ -50,4 +43,35 @@ function changeColors(color){
 		//change each color to match given color
 		squares[i].style.backgroundColor = color;
 	}	
+}
+
+//fungsi untuk random warna dari array colors sebagai warna terpilih/jawaban
+function pickColor(){
+	//mendapat nilai acak dari 0 - 5
+	var random = Math.floor(Math.random() * colors.length);
+	return colors[random];
+}
+
+//fungsi untuk membuat 6 warna random
+function generateRandomColors(num){
+	//make an array
+	var arr = [];
+	//ulang sebanyak num kali
+	for(var i=0; i<num; i++){		
+		//mendapatkan warna random dan push ke array
+		arr.push(randomColor());
+	}
+	//sudah generate 6 warna random, return value
+	return arr;
+}
+
+function randomColor(){
+	//random warna "red" dari 0 - 255
+	var r = Math.floor(Math.random() * 256);
+	//random warna "green" dari 0 - 255
+	var g = Math.floor(Math.random() * 256);
+	//random warna "blue" dari 0 - 255
+	var b = Math.floor(Math.random() * 256);
+	//sudah mendapatkan full rgb, return value
+	return "rgb("+r+", "+g+", "+b+")";
 }
