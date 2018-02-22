@@ -1,4 +1,7 @@
-var colors = generateRandomColors(6);
+//variable untuk menampung tipe game, easy/hard
+var numSquares = 6;
+//variable untuk menampung warna random sebanyak n
+var colors = generateRandomColors(numSquares);
 
 //ambil element div class square
 var squares = document.querySelectorAll(".square");
@@ -13,13 +16,57 @@ var h1 = document.querySelector("h1");
 //ambil button reset
 var resetButton = document.getElementById("reset");
 
+var easyBtn = document.querySelector("#easyBtn");
+var hardBtn = document.querySelector("#hardBtn");
+
+//dijalankan jika button easy diklik
+easyBtn.addEventListener("click", function(){	
+	//mewarnai button easy
+	easyBtn.classList.add("selected");
+	hardBtn.classList.remove("selected");
+	//generate sebanyak 3 warna random
+	numSquares = 3;
+	colors = generateRandomColors(numSquares);
+	//memilih salah satu dari 3 warna sebagai warna pilihan
+	pickedColor = pickColor();
+	//looping untuk warna squares
+	//untuk squares ke 4-6, dihilangkan
+	for (var i = 0; i<squares.length; i++){
+		if(colors[i]){
+			squares[i].style.backgroundColor = colors[i];
+		} else {
+			squares[i].style.display = "none";
+		}	
+	}
+});
+
+//dijalankan jika button hard diklik
+hardBtn.addEventListener("click", function(){	
+	//mewarnai button hard
+	hardBtn.classList.add("selected");
+	easyBtn.classList.remove("selected");
+	//generate sebanyak 6 warna random
+	numSquares = 6;
+	colors = generateRandomColors(numSquares);
+	//memilih salah satu dari 6 warna sebagai warna pilihan
+	pickedColor = pickColor();
+	//looping untuk warna squares
+	//memunculkan squares jika sebelumnya dihidden
+	for (var i=0; i<squares.length; i++){
+		if(colors[i]){
+			squares[i].style.display = "block";
+			squares[i].style.backgroundColor = colors[i];
+		}
+	}
+});
+
 //mengubah colorDisplay sesuai dengan jawaban rgb
 colorDisplay.textContent = pickedColor;
 
 //mengubah semua warna jika button reset diklik
 resetButton.addEventListener("click", function(){
 	//generate warna baru
-	colors = generateRandomColors(6);
+	colors = generateRandomColors(numSquares);
 	//mendapatkan warna pilihan sebagai jawaban
 	pickedColor = pickColor();
 	//mengubah colorDisplay sesuai dengan jawaban rgb
@@ -29,7 +76,7 @@ resetButton.addEventListener("click", function(){
 		squares[i].style.backgroundColor = colors[i];
 	}
 	h1.style.backgroundColor = "#232323";
-})
+});
 
 //memberi warna ke square div
 for (var i=0; i<squares.length; i++){
