@@ -38,6 +38,8 @@ easyBtn.addEventListener("click", function(){
 			squares[i].style.display = "none";
 		}	
 	}
+	h1.style.backgroundColor = "steelblue";
+	messageDisplay.textContent = "";
 });
 
 //dijalankan jika button hard diklik
@@ -58,6 +60,8 @@ hardBtn.addEventListener("click", function(){
 			squares[i].style.backgroundColor = colors[i];
 		}
 	}
+	h1.style.backgroundColor = "steelblue";
+	messageDisplay.textContent = "";
 });
 
 //mengubah colorDisplay sesuai dengan jawaban rgb
@@ -75,7 +79,8 @@ resetButton.addEventListener("click", function(){
 	for(var i=0; i<squares.length; i++){
 		squares[i].style.backgroundColor = colors[i];
 	}
-	h1.style.backgroundColor = "#232323";
+	h1.style.backgroundColor = "steelblue";
+	messageDisplay.textContent = "";
 });
 
 //memberi warna ke square div
