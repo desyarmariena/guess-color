@@ -1,12 +1,12 @@
 //variable untuk menampung tipe game, easy/hard
 var numSquares = 6;
 //variable untuk menampung warna random sebanyak n
-var colors = generateRandomColors(numSquares);
+var colors = [];
+//mendapatkan warna pilihan sebagai jawaban
+var pickedColor;
 
 //ambil element div class square
 var squares = document.querySelectorAll(".square");
-//mendapatkan warna pilihan sebagai jawaban
-var pickedColor = pickColor();
 //ambil span di h1
 var colorDisplay = document.getElementById("colorDisplay");
 //ambil span di nav
@@ -15,60 +15,62 @@ var messageDisplay = document.getElementById("message");
 var h1 = document.querySelector("h1");
 //ambil button reset
 var resetButton = document.getElementById("reset");
+//ambil button mode (easy/hard)
+var modeButtons = document.querySelectorAll(".mode");
 
-var easyBtn = document.querySelector("#easyBtn");
-var hardBtn = document.querySelector("#hardBtn");
+init();
 
-//dijalankan jika button easy diklik
-easyBtn.addEventListener("click", function(){	
-	//mewarnai button easy
-	easyBtn.classList.add("selected");
-	hardBtn.classList.remove("selected");
-	//generate sebanyak 3 warna random
-	numSquares = 3;
-	colors = generateRandomColors(numSquares);
-	//memilih salah satu dari 3 warna sebagai warna pilihan
-	pickedColor = pickColor();
-	//looping untuk warna squares
-	//untuk squares ke 4-6, dihilangkan
-	for (var i = 0; i<squares.length; i++){
-		if(colors[i]){
-			squares[i].style.backgroundColor = colors[i];
-		} else {
-			squares[i].style.display = "none";
-		}	
-	}
-	h1.style.backgroundColor = "steelblue";
-	messageDisplay.textContent = "";
-});
-
-//dijalankan jika button hard diklik
-hardBtn.addEventListener("click", function(){	
-	//mewarnai button hard
-	hardBtn.classList.add("selected");
-	easyBtn.classList.remove("selected");
-	//generate sebanyak 6 warna random
-	numSquares = 6;
-	colors = generateRandomColors(numSquares);
-	//memilih salah satu dari 6 warna sebagai warna pilihan
-	pickedColor = pickColor();
-	//looping untuk warna squares
-	//memunculkan squares jika sebelumnya dihidden
-	for (var i=0; i<squares.length; i++){
-		if(colors[i]){
-			squares[i].style.display = "block";
-			squares[i].style.backgroundColor = colors[i];
-		}
-	}
-	h1.style.backgroundColor = "steelblue";
-	messageDisplay.textContent = "";
-});
-
-//mengubah colorDisplay sesuai dengan jawaban rgb
-colorDisplay.textContent = pickedColor;
+function init(){
+	setupModeButton();
+	setupSquares();
+	reset();
+}
 
 //mengubah semua warna jika button reset diklik
 resetButton.addEventListener("click", function(){
+	reset();
+});
+
+function setupModeButton(){
+	//memilih tipe permainan/mode buttons
+	for(var i=0; i<modeButtons.length; i++){
+		modeButtons[i].addEventListener("click", function(){
+			modeButtons[0].classList.remove("selected");
+			modeButtons[1].classList.remove("selected");
+			this.classList.add("selected");
+			this.textContent === "Easy" ? numSquares = 3: numSquares = 6;
+			reset();
+		});
+	}
+}
+
+function setupSquares(){
+	//event listener untuk squares
+	for (var i=0; i<squares.length; i++){
+		//event jika square diklik
+		squares[i].addEventListener("click", function(){
+			//mendapatkan warna di square yang diklik
+			var clickedColor = this.style.backgroundColor;
+			//membandingkan warna
+			//jika warna cocok, tampilkan pesan Correct
+			//jika salah, tampilkan pesan Try Again
+			if(clickedColor === pickedColor){
+				messageDisplay.textContent = "Correct";
+				resetButton.textContent = "Play Again?";
+				//mengubah semua warna square menjadi warna yang benar
+				changeColors(clickedColor);
+				h1.style.backgroundColor = clickedColor;
+			}
+			else{
+				//ubah warna menjadi sama dengan background, "fade out"
+				this.style.backgroundColor = "#232323";
+				messageDisplay.textContent = "Try Again";
+			}
+		});
+	}
+}
+
+function reset(){
 	//generate warna baru
 	colors = generateRandomColors(numSquares);
 	//mendapatkan warna pilihan sebagai jawaban
@@ -77,38 +79,18 @@ resetButton.addEventListener("click", function(){
 	colorDisplay.textContent = pickedColor;
 	//change colors of squares
 	for(var i=0; i<squares.length; i++){
-		squares[i].style.backgroundColor = colors[i];
+		if(colors[i]){
+			squares[i].style.display = "block";
+			squares[i].style.backgroundColor = colors[i];
+		} else {
+			squares[i].style.display = "none";
+		}		
 	}
+	//reset tulisan dan warna
 	h1.style.backgroundColor = "steelblue";
 	messageDisplay.textContent = "";
-});
-
-//memberi warna ke square div
-for (var i=0; i<squares.length; i++){
-	//inisialisasi warna awal ke square div
-	squares[i].style.backgroundColor = colors[i];
-
-	//event jika square diklik
-	squares[i].addEventListener("click", function(){
-		//mendapatkan warna di square yang diklik
-		var clickedColor = this.style.backgroundColor;
-		//membandingkan warna
-		//jika warna cocok, tampilkan pesan Correct
-		//jika salah, tampilkan pesan Try Again
-		if(clickedColor === pickedColor){
-			messageDisplay.textContent = "Correct";
-			resetButton.textContent = "Play Again?";
-			//mengubah semua warna square menjadi warna yang benar
-			changeColors(clickedColor);
-			h1.style.backgroundColor = clickedColor;
-		}
-		else{
-			//ubah warna menjadi sama dengan background, "fade out"
-			this.style.backgroundColor = "#232323";
-			messageDisplay.textContent = "Try Again";
-		}
-	});
-}
+	resetButton.textContent = "New Colors";
+}  
 
 //fungsi untuk mengubah semua warna square menjadi warna tertentu
 function changeColors(color){
